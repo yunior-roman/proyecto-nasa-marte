@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#061d39">
+    <meta name="description" content="Guía de supervivencia interplanetaria para explorar Marte y planificar una misión.">
+    <title>{% if current_module %}{{ current_module.title|e }} | {% endif %}Guía marciana</title>
+    <link rel="stylesheet" href="assets/app.css?v=10">
+    <script src="assets/app.js?v=9" defer></script>
+</head>
+<body data-tool-view="{{ tool_view|e }}">
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="nasa-brand" href="/#inicio" aria-label="NASA, inicio">
+                <span class="nasa-insignia" aria-hidden="true"><span>NASA</span></span>
+                <span class="brand-word">Exploración</span>
+            </a>
+            <nav class="top-nav" aria-label="Navegación principal">
+                <a href="/#inicio">Inicio</a>
+                <a href="/#mision">Misiones</a>
+                <a href="/?seccion=entorno">Ciencia</a>
+                <a href="/?seccion=rutas">Exploración</a>
+                <a href="/#guia">Noticias</a>
+                <a href="/#pie">Acerca de NASA</a>
+            </nav>
+            <form class="search-form" id="guide-search" action="/" method="get" role="search">
+                <label class="visually-hidden" for="search-input">Buscar en la guía</label>
+                <input id="search-input" name="q" type="search" placeholder="Buscar..." autocomplete="off" value="{{ search_query|e }}">
+                <button type="submit" aria-label="Buscar en la guía">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.4"></circle><path d="m16 16 4.3 4.3"></path></svg>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    {% if not current_module %}
+    <section class="hero" id="inicio" aria-labelledby="page-title">
+        <div class="hero-image" role="img" aria-label="Explorador robótico estudiando el terreno de Marte"></div>
+        <div class="hero-shade"></div>
+        <div class="hero-copy">
+            <p class="hero-eyebrow">EXPLORACIÓN</p>
+            <h1 id="page-title">Guía de supervivencia<br>interplanetaria</h1>
+            <p class="hero-subtitle">Mapa de Marte</p>
+            <p class="hero-description">Prepárate para tu misión. Esta guía te ayudará a planificar,<br class="desktop-break"> explorar y sobrevivir en el entorno marciano.</p>
+        </div>
+        <span class="hero-caption">SUPERFICIE MARCIANA · SOL 184</span>
+    </section>
+    {% endif %}
+
+    <main class="dashboard" id="mision">
+        <aside class="sidebar" aria-label="Secciones y herramientas de la guía">
+            <a class="sidebar-link {{ 'is-active' if section == 'inicio' else '' }}" href="/" {{ ('aria-current="page"' if section == 'inicio' else '')|safe }}><span aria-hidden="true">⌂</span>Inicio</a>
+            <a class="sidebar-link {{ 'is-active' if section == 'entorno' else '' }}" href="/?seccion=entorno" {{ ('aria-current="page"' if section == 'entorno' else '')|safe }}><span aria-hidden="true">◉</span>El entorno marciano</a>
+            <a class="sidebar-link {{ 'is-active' if section == 'equipo' else '' }}" href="/?seccion=equipo" {{ ('aria-current="page"' if section == 'equipo' else '')|safe }}><span aria-hidden="true">♧</span>Tu equipo</a>
+            <a class="sidebar-link {{ 'is-active' if section == 'rutas' else '' }}" href="/?seccion=rutas" {{ ('aria-current="page"' if section == 'rutas' else '')|safe }}><span aria-hidden="true">▱</span>Rutas y destinos</a>
+            <a class="sidebar-link {{ 'is-active' if section == 'condiciones' else '' }}" href="/?seccion=condiciones" {{ ('aria-current="page"' if section == 'condiciones' else '')|safe }}><span aria-hidden="true">♨</span>Condiciones de vida</a>
+            <a class="sidebar-link {{ 'is-active' if section == 'consejos' else '' }}" href="/?seccion=consejos" {{ ('aria-current="page"' if section == 'consejos' else '')|safe }}><span aria-hidden="true">⛨</span>Consejos de supervivencia</a>
+            <a class="sidebar-link {{ 'is-active' if section == 'recursos' else '' }}" href="/?seccion=recursos" {{ ('aria-current="page"' if section == 'recursos' else '')|safe }}><span aria-hidden="true">↗</span>Recursos y enlaces</a>
+            <span class="sidebar-heading">HERRAMIENTAS</span>
+            <a class="sidebar-link" data-tool-link href="/?apartado=mars-map#mars-map" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">⌖</span>Mapa de Marte</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=nasa-gallery#nasa-gallery" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▧</span>Galería NASA</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=mission-dashboard#mission-dashboard" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▦</span>Panel de misión</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=survival-simulator#survival-simulator" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">♡</span>Simulador</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=resource-detector#resource-detector" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">◈</span>Detector de recursos</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=hazard-alerts#hazard-alerts" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">!</span>Alertas</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=mission-checklist#mission-checklist" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☑</span>Checklist</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=rovers#rovers" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▱</span>Rovers</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=mars-quiz#mars-quiz" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">?</span>Quiz marciano</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=mars-weather#mars-weather" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☼</span>Clima de Marte</a>
+            <a class="sidebar-link" data-tool-link href="/?apartado=my-progress#my-progress" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">☆</span>Favoritos y progreso</a>
+            <a class="sidebar-link sidebar-ai-link" href="#asistente-ia" data-open-assistant><span aria-hidden="true">✳</span>Asistente IA</a>
+        </aside>
+
+        <div class="dashboard-content">
+            {% if not current_module %}
+            <section class="overview-row" aria-label="Resumen de la misión">
+                <article class="mission-intro">
+                    <span class="mission-symbol" aria-hidden="true">
+                        <svg viewBox="0 0 32 32"><path d="M16 6v5m0 0H8m8 0h8M8 11v5m8-5v5m8-5v5M16 16v5m-8 0h16M8 21v4m8-4v4m8-4v4"></path><circle cx="16" cy="4" r="2"></circle><circle cx="8" cy="18" r="2"></circle><circle cx="16" cy="18" r="2"></circle><circle cx="24" cy="18" r="2"></circle><circle cx="8" cy="27" r="2"></circle><circle cx="16" cy="27" r="2"></circle><circle cx="24" cy="27" r="2"></circle></svg>
+                    </span>
+                    <div>
+                        <h2>Tu misión</h2>
+                        <p>Explorar Marte, recopilar datos científicos, analizar el terreno y descubrir pistas sobre su pasado y su posible vida.</p>
+                    </div>
+                </article>
+                <div class="mission-facts">
+                    <div class="fact">
+                        <span class="fact-icon" aria-hidden="true">●</span>
+                        <div><strong>Destino</strong><span>Marte</span></div>
+                    </div>
+                    <div class="fact">
+                        <span class="fact-icon" aria-hidden="true">▦</span>
+                        <div><strong>Duración</strong><span>Décadas</span></div>
+                    </div>
+                    <div class="fact">
+                        <span class="fact-icon" aria-hidden="true">⌁</span>
+                        <div><strong>Dificultad</strong><span class="difficulty">Intermedio</span></div>
+                    </div>
+                    <div class="fact">
+                        <span class="fact-icon" aria-hidden="true">⚙</span>
+                        <div><strong>Área</strong><span>Exploración espacial</span></div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            {% if not_found %}
+            <section class="module-page" id="guia" aria-labelledby="guide-title">
+                <a class="back-link" href="/#guia"><span aria-hidden="true">←</span> Volver a la guía</a>
+                <div class="module-page-heading">
+                    <span class="module-number">404</span>
+                    <div>
+                        <p class="section-kicker">SECCIÓN NO DISPONIBLE</p>
+                        <h2 id="guide-title">No encontramos esta página</h2>
+                        <p>El módulo que buscas no está disponible. Vuelve a la guía para elegir otra sección.</p>
+                    </div>
+                </div>
+                <a class="module-home-link" href="/">Volver al inicio <span aria-hidden="true">→</span></a>
+            </section>
+            {% elif current_module %}
+            <section class="module-page" id="guia" aria-labelledby="guide-title">
+                <a class="back-link" href="/#guia"><span aria-hidden="true">←</span> Volver a todos los módulos</a>
+                <div class="module-page-heading">
+                    <span class="module-number">{{ current_module.number|e }}</span>
+                    <div>
+                        <p class="section-kicker">{{ current_module.label|e }}</p>
+                        <h2 id="guide-title">{{ current_module.title|e }}</h2>
+                        <p>{{ current_module.intro|e }}</p>
+                    </div>
+                </div>
+
+                <div class="module-topic-grid">
+                    {% for topic in current_module.topics %}
+                    <article class="module-topic">
+                        <span class="topic-marker" aria-hidden="true"></span>
+                        <div>
+                            <h3>{{ topic.title|e }}</h3>
+                            <p>{{ topic.description|e }}</p>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <aside class="module-ai-callout">
+                    <span class="module-ai-icon" aria-hidden="true">✳</span>
+                    <div>
+                        <h3>¿Quieres saber más sobre este tema?</h3>
+                        <p>Pregunta al asistente de IA y sigue explorando Marte.</p>
+                    </div>
+                    <button class="module-ai-button" type="button" data-ask-assistant="{{ current_module.prompt|e }}">Preguntar a la IA <span aria-hidden="true">↗</span></button>
+                </aside>
+                <p class="module-disclaimer">Contenido informativo. Contrasta los datos con fuentes científicas y los procedimientos de cada misión.</p>
+            </section>
+            {% elif search_query %}
+            <section class="search-results" id="guia" aria-labelledby="guide-title">
+                <a class="back-link" href="/"><span aria-hidden="true">←</span> Volver al inicio</a>
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">BÚSQUEDA EN LA GUÍA</p>
+                        <h2 id="guide-title">Resultados para “{{ search_query|e }}”</h2>
+                    </div>
+                    <span class="section-count">{{ matching_modules|length }} RESULTADOS</span>
+                </div>
+                {% if matching_modules %}
+                <div class="search-results-list">
+                    {% for module_key, module in matching_modules %}
+                    <a class="search-result" href="/?seccion={{ module_key|urlencode }}">
+                        <span class="search-result-number">{{ module.number|e }}</span>
+                        <span class="search-result-copy">
+                            <strong>{{ module.title|e }}</strong>
+                            <span>{{ module.intro|e }}</span>
+                        </span>
+                        <span class="search-result-arrow" aria-hidden="true">→</span>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="search-no-results">No encontramos módulos con esa búsqueda. Prueba con otras palabras.</p>
+                {% endif %}
+            </section>
+            {% else %}
+            <section class="home-welcome" id="guia">
+                <span class="home-welcome-icon" aria-hidden="true">⌖</span>
+                <div>
+                    <h2>Tu próxima parada en Marte</h2>
+                    <p>Elige una sección del menú para abrir la información de tu misión. Cada módulo tiene su propia página y su asistente IA.</p>
+                </div>
+                <span class="home-module-count">06 MÓDULOS</span>
+            </section>
+            {% endif %}
+
+            {% if tool_view %}
+            <section class="mission-tools" aria-labelledby="tools-title">
+                <div class="tool-return-bar">
+                    <nav class="module-return-nav" aria-label="Ir a un módulo de la guía">
+                        <span>Volver a módulo:</span>
+                        {% for module_key, module in modules %}
+                        <a href="/?seccion={{ module_key|urlencode }}#guia">{{ module.title|e }}</a>
+                        {% endfor %}
+                    </nav>
+                </div>
+                <div class="section-heading">
+                    <div>
+                        <p class="section-kicker">CENTRO DE MISIÓN</p>
+                        <h2 id="tools-title">Explora Marte</h2>
+                    </div>
+                    <span class="section-count">MAPAS · CIENCIA · APRENDIZAJE</span>
+                </div>
+                <nav class="tools-nav" aria-label="Herramientas de exploración">
+                    <a href="/?apartado=mars-map#mars-map" target="_blank" rel="noopener noreferrer"{% if tool_view == "mars-map" %} class="is-current" aria-current="page"{% endif %}>Mapa <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=nasa-gallery#nasa-gallery" target="_blank" rel="noopener noreferrer"{% if tool_view == "nasa-gallery" %} class="is-current" aria-current="page"{% endif %}>Galería <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=mission-dashboard#mission-dashboard" target="_blank" rel="noopener noreferrer"{% if tool_view == "mission-dashboard" %} class="is-current" aria-current="page"{% endif %}>Panel de misión <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=survival-simulator#survival-simulator" target="_blank" rel="noopener noreferrer"{% if tool_view == "survival-simulator" %} class="is-current" aria-current="page"{% endif %}>Supervivencia <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=resource-detector#resource-detector" target="_blank" rel="noopener noreferrer"{% if tool_view == "resource-detector" %} class="is-current" aria-current="page"{% endif %}>Recursos <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=hazard-alerts#hazard-alerts" target="_blank" rel="noopener noreferrer"{% if tool_view == "hazard-alerts" %} class="is-current" aria-current="page"{% endif %}>Alertas <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=mission-checklist#mission-checklist" target="_blank" rel="noopener noreferrer"{% if tool_view == "mission-checklist" %} class="is-current" aria-current="page"{% endif %}>Checklist <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=rovers#rovers" target="_blank" rel="noopener noreferrer"{% if tool_view == "rovers" %} class="is-current" aria-current="page"{% endif %}>Rovers <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=mars-quiz#mars-quiz" target="_blank" rel="noopener noreferrer"{% if tool_view == "mars-quiz" %} class="is-current" aria-current="page"{% endif %}>Quiz <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=mars-weather#mars-weather" target="_blank" rel="noopener noreferrer"{% if tool_view == "mars-weather" %} class="is-current" aria-current="page"{% endif %}>Clima <span class="visually-hidden">(nueva pestaña)</span></a>
+                    <a href="/?apartado=my-progress#my-progress" target="_blank" rel="noopener noreferrer"{% if tool_view == "my-progress" %} class="is-current" aria-current="page"{% endif %}>Favoritos y progreso <span class="visually-hidden">(nueva pestaña)</span></a>
+                </nav>
+
+                <section class="tool-panel" id="mars-map" aria-labelledby="map-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading map-workspace-heading">
+                        <div><p class="section-kicker">CENTRO CARTOGRÁFICO · MARTE</p><h2 id="map-title">Explorador de superficie</h2></div>
+                        <span class="data-badge">Elevaciones reales MOLA · Misiones</span>
+                    </div>
+                    <p class="tool-intro">Consulta la elevación medida por el altímetro láser MOLA en los sitios de misión. El dibujo del mapa sigue siendo ilustrativo y no representa el relieve a escala.</p>
+                    <div class="mars-map-layout">
+                        <aside class="map-layers" aria-label="Capas del mapa">
+                            <p class="map-panel-label">CAPAS</p>
+                            <label><input type="checkbox" data-map-layer="relief" checked> <span class="layer-swatch relief-swatch" aria-hidden="true"></span> Relieve ilustrativo</label>
+                            <label><input type="checkbox" data-map-layer="sites" checked> <span class="layer-swatch site-swatch" aria-hidden="true"></span> Sitios de misión</label>
+                            <label><input type="checkbox" data-map-layer="ice"> <span class="layer-swatch ice-swatch" aria-hidden="true"></span> Referencias de hielo</label>
+                            <label><input type="checkbox" data-map-layer="grid"> <span class="layer-swatch grid-swatch" aria-hidden="true"></span> Cuadrícula</label>
+                            <p class="map-layer-note">El dibujo y el hielo son ilustrativos; las elevaciones del panel proceden del archivo MOLA.</p>
+                        </aside>
+                        <div class="map-viewer">
+                            <div class="map-viewer-top">
+                                <span><span class="map-live-dot" aria-hidden="true"></span> MARTE · VISTA DE TERRENO</span>
+                                <span class="map-coordinates" id="map-coordinates">4.59° S, 137.44° E</span>
+                            </div>
+                            <div class="mars-map map-layer-relief map-layer-sites" id="mars-map-view" role="group" aria-label="Mapa ilustrativo de Marte con sitios de aterrizaje">
+                                <div class="map-surface">
+                                    <span class="map-crater crater-one"></span><span class="map-crater crater-two"></span>
+                                    <span class="map-crater crater-three"></span><span class="map-crater crater-four"></span>
+                                    <span class="map-ridge ridge-one"></span><span class="map-ridge ridge-two"></span>
+                                    <span class="map-ice-zone ice-zone-one"></span><span class="map-ice-zone ice-zone-two"></span>
+                                    <svg class="map-contours" viewBox="0 0 1000 560" preserveAspectRatio="none">
+                                        <path d="M-20 112C120 52 172 174 294 116S483 53 588 133s173 61 256 8 123-58 184-5M-20 146c142-65 174 78 300 18S478 97 585 165s162 46 259-8 128-54 180-4M-20 181c135-55 190 44 311-12s190-61 290 0 164 30 255-19 130-40 174 2M-20 380c111-68 188-14 283 35s178 42 275-10 181-69 274-8 132 58 196 26M-20 417c112-59 189 14 287 48s175 27 271-22 174-54 271 0 141 44 199 19M-20 455c111-48 188 38 290 59s171 11 267-35 171-39 272 8 144 32 196 12"/>
+                                    </svg>
+                                    <span class="map-place place-gale">CRÁTER GALE</span><span class="map-place place-jezero">CRÁTER JEZERO</span><span class="map-place place-elysium">ELYSIUM PLANITIA</span>
+                                    <button class="map-marker marker-curiosity" type="button" data-site="curiosity" aria-label="Mostrar Gale, lugar de aterrizaje de Curiosity" aria-pressed="true"><span>01</span></button>
+                                    <button class="map-marker marker-perseverance" type="button" data-site="perseverance" aria-label="Mostrar Jezero, lugar de aterrizaje de Perseverance"><span>02</span></button>
+                                    <button class="map-marker marker-insight" type="button" data-site="insight" aria-label="Mostrar Elysium Planitia, lugar de aterrizaje de InSight"><span>03</span></button>
+                                    <span class="map-north" aria-hidden="true">N<br>↑</span>
+                                    <span class="map-scale" aria-hidden="true"><i></i> VISTA ORIENTATIVA</span>
+                                    <span class="map-grid-overlay" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                            <div class="map-controls" aria-label="Controles de zoom">
+                                <span class="map-scale-label">Exploración de superficie</span>
+                                <div><button type="button" data-map-zoom="out" aria-label="Alejar mapa">−</button><span id="map-zoom-level" aria-live="polite">100%</span><button type="button" data-map-zoom="in" aria-label="Acercar mapa">+</button><button type="button" data-map-zoom="reset">Restablecer</button></div>
+                            </div>
+                        </div>
+                        <article class="map-detail" id="map-detail" aria-live="polite">
+                            <p class="section-kicker">MISIÓN SELECCIONADA</p><h3>Gale — Curiosity</h3>
+                            <p class="map-site-coordinates" id="map-site-coordinates">4.59° S, 137.44° E</p>
+                            <p>Curiosity aterrizó en el cráter Gale el 6 de agosto de 2012 (UTC) y estudia la geología y la habitabilidad pasada.</p>
+                            <div class="mola-readout">
+                                <strong>Elevación sobre el areoide</strong>
+                                <span id="elevation-value" aria-live="polite">Consultando datos MOLA…</span>
+                                <small>Celda de 0,25° · MOLA MEGDR v2.0</small>
+                            </div>
+                            <a href="https://science.nasa.gov/mission/msl-curiosity/" target="_blank" rel="noopener noreferrer">Ver misión en NASA <span aria-hidden="true">↗</span></a>
+                            <div class="map-detail-rule"></div>
+                            <p class="map-source-label">FUENTE CIENTÍFICA</p>
+                            <p id="map-source-name">NASA · Mars Science Laboratory</p>
+                            <p class="mola-updated" id="elevation-updated">Fecha del producto: 3 de abril de 2003 · consultando archivo NASA/PDS…</p>
+                        </article>
+                    </div>
+                    <p class="tool-source">Fuentes: <a href="https://pds-geosciences.wustl.edu/mgs/urn-nasa-pds-mgs_mola_topography_derived/meg004/" target="_blank" rel="noopener noreferrer">Archivo NASA/PDS · MOLA MEGDR</a>, <a href="https://science.nasa.gov/mission/msl-curiosity/" target="_blank" rel="noopener noreferrer">NASA Curiosity</a>, <a href="https://science.nasa.gov/mission/mars-2020-perseverance/" target="_blank" rel="noopener noreferrer">NASA Perseverance</a> y <a href="https://science.nasa.gov/mission/insight/" target="_blank" rel="noopener noreferrer">NASA InSight</a>. La elevación representa la celda MOLA de 0,25° más cercana a las coordenadas del sitio; no es una medición del rover.</p>
+                </section>
+
+                <section class="tool-panel" id="nasa-gallery" aria-labelledby="gallery-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">FOTOGRAFÍAS Y CATÁLOGO</p><h2 id="gallery-title">Galería de imágenes de NASA</h2></div>
+                        <span class="data-badge">Catálogo público</span>
+                    </div>
+                    <p class="tool-intro">Fotografías de las cámaras de los rovers Perseverance y Curiosity, con sus metadatos y fecha de captura o creación indicados por NASA.</p>
+                    <p class="gallery-status" id="gallery-status" role="status">Cargando imágenes del catálogo de NASA…</p>
+                    <p class="gallery-updated" id="gallery-updated">Consultando el catálogo NASA Images…</p>
+                    <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
+                    <p class="tool-source">Fuente: <a href="https://images.nasa.gov/" target="_blank" rel="noopener noreferrer">NASA Images</a>. La fecha de captura/creación pertenece a cada imagen; “consultado” indica la última actualización de esta galería. Requiere conexión a internet.</p>
+                </section>
+
+                <section class="tool-panel survival-panel" id="survival-simulator" aria-labelledby="survival-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">SIMULACIÓN EDUCATIVA · MARTE</p><h2 id="survival-title">Simulador de supervivencia</h2></div>
+                        <span class="data-badge" id="survival-sol">Sol 1</span>
+                    </div>
+                    <p class="tool-intro">Elige un sitio de aterrizaje, administra las reservas y ajusta la energía y temperatura del hábitat.</p>
+                    <div class="survival-controls">
+                        <label for="landing-site-select">Lugar de aterrizaje
+                            <select id="landing-site-select">
+                                <option value="curiosity">Cráter Gale · Curiosity</option>
+                                <option value="perseverance">Cráter Jezero · Perseverance</option>
+                                <option value="insight">Elysium Planitia · InSight</option>
+                            </select>
+                        </label>
+                        <label for="survival-mode">Plan de consumo
+                            <select id="survival-mode">
+                                <option value="saving">Ahorro</option>
+                                <option value="balanced" selected>Equilibrado</option>
+                                <option value="intensive">Alto consumo</option>
+                            </select>
+                        </label>
+                        <label class="temperature-control" for="temperature-target">Termostato del hábitat
+                            <span><input id="temperature-target" type="range" min="10" max="26" step="1" value="20"><output id="temperature-target-value" for="temperature-target">20 °C</output></span>
+                        </label>
+                    </div>
+                    <p class="survival-location" id="survival-location" aria-live="polite">Sitio seleccionado: cráter Gale. Las tasas educativas son iguales en cada lugar.</p>
+                    <div class="survival-resource-grid" aria-label="Reservas actuales">
+                        <article class="survival-resource" data-resource="oxygen">
+                            <div><span>Oxígeno</span><strong id="oxygen-value">100%</strong></div>
+                            <progress id="oxygen-meter" max="100" value="100" aria-label="Reserva de oxígeno"></progress>
+                            <small id="oxygen-use">Consumo por sol: 10%</small>
+                        </article>
+                        <article class="survival-resource" data-resource="water">
+                            <div><span>Agua</span><strong id="water-value">100%</strong></div>
+                            <progress id="water-meter" max="100" value="100" aria-label="Reserva de agua"></progress>
+                            <small id="water-use">Consumo por sol: 12%</small>
+                        </article>
+                        <article class="survival-resource" data-resource="food">
+                            <div><span>Alimentos</span><strong id="food-value">100%</strong></div>
+                            <progress id="food-meter" max="100" value="100" aria-label="Reserva de alimentos"></progress>
+                            <small id="food-use">Consumo por sol: 8%</small>
+                        </article>
+                        <article class="survival-resource" data-resource="energy">
+                            <div><span>Energía</span><strong id="energy-value">100%</strong></div>
+                            <progress id="energy-meter" max="100" value="100" aria-label="Carga de energía"></progress>
+                            <small id="energy-use">Uso por sol: 18% · solar: +8%</small>
+                        </article>
+                    </div>
+                    <div class="survival-temperature">
+                        <span>Temperatura interior</span>
+                        <strong id="cabin-temperature">20 °C</strong>
+                        <span>Objetivo: <span id="temperature-target-summary">20 °C</span></span>
+                    </div>
+                    <div class="survival-alert" id="survival-alert" role="alert" hidden>
+                        <strong>Alertas de recursos y hábitat</strong>
+                        <ul id="survival-alert-list"></ul>
+                    </div>
+                    <p class="survival-status" id="survival-status" role="status" aria-live="polite">Todas las reservas están listas. Ajusta el plan y avanza un sol para comenzar.</p>
+                    <div class="survival-actions">
+                        <button class="tool-button" id="advance-sol" type="button">Avanzar un sol</button>
+                        <button class="text-button" id="reset-simulation" type="button">Reiniciar simulación</button>
+                    </div>
+                    <p class="tool-source">Modelo didáctico: los porcentajes de consumo, recarga solar y cambio térmico son supuestos simplificados para el juego, no mediciones NASA ni especificaciones de una misión real. No usar para planificación operativa.</p>
+                </section>
+
+                <section class="tool-panel mission-dashboard-panel" id="mission-dashboard" aria-labelledby="mission-dashboard-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">CENTRO DE CONTROL · SIMULACIÓN</p><h2 id="mission-dashboard-title">Panel de control de misión</h2></div>
+                        <span class="data-badge">Datos del simulador · educativos</span>
+                    </div>
+                    <div class="mission-dashboard">
+                        <section class="dashboard-status-card" aria-label="Estado de la misión">
+                            <span class="dashboard-eyebrow">ESTADO DE LA MISIÓN</span>
+                            <strong id="dashboard-mission-status" class="dashboard-mission-state">OPERATIVA</strong>
+                            <span id="dashboard-sol">Sol 1 · escenario inicial</span>
+                        </section>
+                        <div class="mission-dashboard-grid">
+                            <section class="dashboard-card dashboard-resources" aria-labelledby="dashboard-resources-title">
+                                <div class="dashboard-card-heading"><div><span class="dashboard-eyebrow">SOPORTE VITAL</span><h3 id="dashboard-resources-title">Nivel de recursos</h3></div><span class="dashboard-live-dot">SIM</span></div>
+                                <div class="dashboard-resource-grid">
+                                    <div class="dashboard-resource"><div><span>Oxígeno</span><strong id="dashboard-oxygen-value">100%</strong></div><progress id="dashboard-oxygen" max="100" value="100" aria-label="Oxígeno restante"></progress></div>
+                                    <div class="dashboard-resource"><div><span>Agua</span><strong id="dashboard-water-value">100%</strong></div><progress id="dashboard-water" max="100" value="100" aria-label="Agua restante"></progress></div>
+                                    <div class="dashboard-resource"><div><span>Alimentos</span><strong id="dashboard-food-value">100%</strong></div><progress id="dashboard-food" max="100" value="100" aria-label="Alimentos restantes"></progress></div>
+                                    <div class="dashboard-resource"><div><span>Energía</span><strong id="dashboard-energy-value">100%</strong></div><progress id="dashboard-energy" max="100" value="100" aria-label="Energía restante"></progress></div>
+                                </div>
+                                <p class="dashboard-temperature">Temperatura del hábitat <strong id="dashboard-temperature">20 °C</strong></p>
+                            </section>
+                            <section class="dashboard-card dashboard-location" aria-labelledby="dashboard-location-title">
+                                <div class="dashboard-card-heading"><div><span class="dashboard-eyebrow">POSICIÓN DEL EXPLORADOR</span><h3 id="dashboard-location-title">Ubicación</h3></div><span class="dashboard-location-dot" aria-hidden="true"></span></div>
+                                <div class="dashboard-map-visual" aria-hidden="true"><span class="dashboard-map-grid"></span><span class="dashboard-map-route"></span><span class="dashboard-rover-marker">R</span><span class="dashboard-map-label">MAPA ESQUEMÁTICO</span></div>
+                                <strong id="dashboard-location-name">Cráter Gale · Curiosity</strong>
+                                <span id="dashboard-coordinates">4.59° S, 137.44° E</span>
+                                <small>Ubicación del escenario; no es seguimiento GPS en vivo.</small>
+                            </section>
+                            <section class="dashboard-card dashboard-survival" aria-labelledby="dashboard-survival-title">
+                                <div class="dashboard-card-heading"><div><span class="dashboard-eyebrow">INDICADOR EDUCATIVO</span><h3 id="dashboard-survival-title">Supervivencia simulada</h3></div></div>
+                                <div class="dashboard-survival-ring" id="dashboard-survival-ring" role="img" aria-label="Índice educativo de supervivencia: 100 por ciento"><span id="dashboard-survival-value">100%</span></div>
+                                <p id="dashboard-survival-note">Índice de escenario, no probabilidad real.</p>
+                            </section>
+                            <section class="dashboard-card dashboard-history" aria-labelledby="dashboard-history-title">
+                                <div class="dashboard-card-heading"><div><span class="dashboard-eyebrow">REGISTRO LOCAL</span><h3 id="dashboard-history-title">Historial de actividades</h3></div><span class="dashboard-history-count" id="dashboard-history-count">0 eventos</span></div>
+                                <ol id="dashboard-activity-list" class="dashboard-activity-list" aria-live="polite">
+                                    <li>Inicia el simulador para registrar actividades.</li>
+                                </ol>
+                            </section>
+                        </div>
+                        <div class="dashboard-footer">
+                            <p>Valores y porcentaje derivados del simulador educativo; no son telemetría ni predicciones médicas.</p>
+                            <a class="tool-button" href="/?apartado=survival-simulator#survival-simulator" target="_blank" rel="noopener noreferrer">Abrir simulador</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tool-panel resource-panel" id="resource-detector" aria-labelledby="resource-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">ISRU · EXPLORACIÓN DE RECURSOS</p><h2 id="resource-title">Detector de recursos naturales</h2></div>
+                        <span class="data-badge">Datos y evidencias NASA</span>
+                    </div>
+                    <p class="tool-intro">Compara zonas con observaciones directas o indicios orbitales. Un recurso detectado o sugerido no implica que sea abundante, accesible o aprovechable para una base.</p>
+                    <div class="resource-legend" aria-label="Tipos de evidencia">
+                        <span class="resource-evidence confirmed">Confirmado en sitio</span>
+                        <span class="resource-evidence orbital">Indicio orbital</span>
+                        <span class="resource-evidence ancient">Evidencia de agua antigua</span>
+                        <span class="resource-evidence potential">Recurso potencial</span>
+                    </div>
+                    <fieldset class="resource-comparison">
+                        <legend>Lugares candidatos para comparar</legend>
+                        <label><input type="checkbox" data-resource-site="arcadia" checked> Arcadia Planitia</label>
+                        <label><input type="checkbox" data-resource-site="vastitas" checked> Vastitas Borealis · Phoenix</label>
+                        <label><input type="checkbox" data-resource-site="jezero" checked> Cráter Jezero</label>
+                    </fieldset>
+                    <p class="resource-compare-status" id="resource-compare-status" role="status" aria-live="polite">Comparando 3 lugares candidatos.</p>
+                    <div class="resource-site-grid" id="resource-site-grid">
+                        <article class="resource-site-card" data-resource-card="arcadia">
+                            <div class="resource-site-heading">
+                                <span class="resource-site-coordinate">≈ 40° N · llanura norte</span>
+                                <h3>Arcadia Planitia</h3>
+                                <span class="resource-evidence orbital">Indicio orbital · análisis NASA de 2019</span>
+                            </div>
+                            <dl>
+                                <div><dt>Agua / hielo</dt><dd>Mapas orbitales sugieren depósitos de hielo posiblemente someros en partes de la región. La profundidad y distribución local requieren verificación.</dd></div>
+                                <div><dt>Otros recursos potenciales</dt><dd>Regolito y minerales locales; el CO₂ atmosférico podría ser materia prima para producir oxígeno con tecnología adecuada.</dd></div>
+                                <div><dt>Para una base</dt><dd>Latitud media norte: el análisis de NASA destaca el equilibrio relativo entre luz solar, temperatura y accesibilidad frente a los polos. El terreno y los peligros deben evaluarse a escala del lugar.</dd></div>
+                            </dl>
+                            <p class="resource-caution">El mapa de hielo es una inferencia orbital regional, no una perforación ni un inventario de agua extraíble.</p>
+                            <a href="https://www.nasa.gov/solar-system/nasas-treasure-map-for-water-ice-on-mars/" target="_blank" rel="noopener noreferrer">NASA · mapa de hielo subsuperficial ↗</a>
+                        </article>
+                        <article class="resource-site-card" data-resource-card="vastitas">
+                            <div class="resource-site-heading">
+                                <span class="resource-site-coordinate">≈ 68° N · llanura ártica</span>
+                                <h3>Vastitas Borealis · Phoenix</h3>
+                                <span class="resource-evidence confirmed">Hielo de agua confirmado por Phoenix · 2008</span>
+                            </div>
+                            <dl>
+                                <div><dt>Agua / hielo</dt><dd>Phoenix raspó y analizó suelo con hielo de agua cerca de la superficie en su lugar de aterrizaje (2008).</dd></div>
+                                <div><dt>Otros recursos potenciales</dt><dd>Phoenix detectó perclorato en el suelo. Su presencia está confirmada allí; no significa que sea seguro ni sencillo aprovecharlo. El regolito requeriría procesamiento.</dd></div>
+                                <div><dt>Para una base</dt><dd>Evidencia directa de hielo en el sitio y suelo estudiado. La latitud ártica implica un entorno frío y condiciones de iluminación estacionales que deben considerarse.</dd></div>
+                            </dl>
+                            <p class="resource-caution">Resultado histórico de una zona pequeña: no describe las reservas actuales ni garantiza hielo accesible en cada punto de la llanura.</p>
+                            <a href="https://science.nasa.gov/mission/phoenix/" target="_blank" rel="noopener noreferrer">NASA · misión Phoenix y hallazgos ↗</a>
+                        </article>
+                        <article class="resource-site-card" data-resource-card="jezero">
+                            <div class="resource-site-heading">
+                                <span class="resource-site-coordinate">≈ 18.4° N · delta de un antiguo lago</span>
+                                <h3>Cráter Jezero</h3>
+                                <span class="resource-evidence ancient">Agua antigua confirmada · hielo actual no confirmado</span>
+                            </div>
+                            <dl>
+                                <div><dt>Agua / hielo</dt><dd>El delta y las rocas preservan evidencia geológica de agua líquida antigua. Esa evidencia no demuestra agua líquida ni hielo aprovechable hoy.</dd></div>
+                                <div><dt>Otros recursos potenciales</dt><dd>Rocas y minerales hidratados estudiados por Perseverance; su uso como material de construcción o materia prima es una posibilidad, no una capacidad demostrada en el sitio.</dd></div>
+                                <div><dt>Para una base</dt><dd>Terreno y geología investigados por un rover; el cráter presenta relieves y depósitos diversos. Harían falta prospección de hielo, análisis de ingeniería y evaluación de riesgos locales.</dd></div>
+                            </dl>
+                            <p class="resource-caution">La presencia de minerales formados con agua en el pasado no equivale a una fuente actual de agua.</p>
+                            <a href="https://science.nasa.gov/mission/mars-2020-perseverance/" target="_blank" rel="noopener noreferrer">NASA · misión Perseverance en Jezero ↗</a>
+                        </article>
+                    </div>
+                    <div class="resource-availability">
+                        <h3>¿Qué podría aprovecharse?</h3>
+                        <div class="resource-availability-grid">
+                            <article><span class="resource-evidence confirmed">Confirmado, pero localizado</span><h4>Hielo de agua</h4><p>Detectado directamente por Phoenix en Vastitas Borealis. En Arcadia existen indicios orbitales; en Jezero el agua conocida es evidencia geológica antigua.</p></article>
+                            <article><span class="resource-evidence confirmed">Composición confirmada</span><h4>Regolito y minerales</h4><p>El suelo y las rocas están presentes y se analizan en varias misiones; extraer materiales útiles a escala de una base sigue siendo un reto tecnológico.</p></article>
+                            <article><span class="resource-evidence potential">Potencial tecnológico</span><h4>Oxígeno del CO₂</h4><p>La atmósfera marciana es rica en dióxido de carbono. Su conversión requiere equipos y energía; no es una reserva de oxígeno respirable disponible directamente.</p><a href="https://science.nasa.gov/mission/mars-2020-perseverance/science-instruments/" target="_blank" rel="noopener noreferrer">NASA · instrumento MOXIE ↗</a></article>
+                        </div>
+                    </div>
+                    <p class="tool-source">Fuentes: <a href="https://www.nasa.gov/solar-system/nasas-treasure-map-for-water-ice-on-mars/" target="_blank" rel="noopener noreferrer">NASA/JPL · mapa orbital de hielo (MRO y Mars Odyssey)</a>, <a href="https://science.nasa.gov/mission/phoenix/" target="_blank" rel="noopener noreferrer">NASA Phoenix · hielo y perclorato medidos en el sitio</a> y <a href="https://science.nasa.gov/mission/mars-2020-perseverance/" target="_blank" rel="noopener noreferrer">NASA Perseverance · geología de Jezero</a>. Las evaluaciones son comparativas e informativas, no una recomendación de emplazamiento.</p>
+                </section>
+
+                <section class="tool-panel hazard-panel" id="hazard-alerts" aria-labelledby="hazard-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">SEGURIDAD · ENTORNO Y ACTIVIDAD EXTRAVEHICULAR</p><h2 id="hazard-title">Alertas de condiciones peligrosas</h2></div>
+                        <span class="data-badge hazard-data-badge">Información educativa · no en tiempo real</span>
+                    </div>
+                    <div class="hazard-live-notice" role="note">
+                        <strong>No hay alertas operativas activas disponibles en esta página.</strong>
+                        <span>Las tarjetas describen peligros conocidos y señales generales de precaución; no reflejan condiciones actuales en una ubicación ni sustituyen el control de misión.</span>
+                    </div>
+                    <section class="hazard-dashboard" aria-labelledby="hazard-dashboard-title">
+                        <div class="hazard-scene">
+                            <h3 id="hazard-dashboard-title">Centro de alertas · simulación 3D</h3>
+                            <div class="mars-scene" data-scenario="dust" role="img" aria-label="Escena 3D ilustrativa de Marte, un orbitador y alertas simuladas">
+                                <div class="mars-orbit mars-orbit-back"></div>
+                                <div class="mars-planet">
+                                    <span class="mars-crater mars-crater-one"></span>
+                                    <span class="mars-crater mars-crater-two"></span>
+                                    <span class="mars-crater mars-crater-three"></span>
+                                    <span class="mars-alert-point" aria-hidden="true"></span>
+                                </div>
+                                <div class="mars-orbit mars-orbit-front"></div>
+                                <div class="mars-satellite" aria-hidden="true">
+                                    <span class="satellite-panel satellite-panel-left"></span>
+                                    <span class="satellite-body"></span>
+                                    <span class="satellite-panel satellite-panel-right"></span>
+                                </div>
+                                <span class="scene-label scene-label-planet">MARTE · ESCENA ILUSTRATIVA</span>
+                                <span class="scene-label scene-label-orbit">ORBITADOR</span>
+                            </div>
+                            <p class="scene-caption">Planeta y orbitador animados en CSS 3D. No representa telemetría ni una imagen real.</p>
+                            <div class="scenario-controls" aria-label="Simular una alerta">
+                                <button type="button" data-hazard-scenario="dust" aria-pressed="true">Simular polvo</button>
+                                <button type="button" data-hazard-scenario="temperature" aria-pressed="false">Simular frío extremo</button>
+                                <button type="button" data-hazard-scenario="radiation" aria-pressed="false">Simular radiación</button>
+                                <button type="button" data-hazard-scenario="eva" aria-pressed="false">Simular riesgo EVA</button>
+                            </div>
+                        </div>
+                        <div class="hazard-feed">
+                            <div class="hazard-feed-heading">
+                                <div><span class="hazard-feed-kicker">BANDEJA DE PRUEBA</span><h3>Alertas de ejemplo</h3></div>
+                                <button type="button" class="hazard-clear-button" id="clear-hazard-alerts">Limpiar</button>
+                            </div>
+                            <p class="hazard-demo-label">Todas las alertas son escenarios ficticios para probar la interfaz.</p>
+                            <div id="hazard-alert-feed" class="hazard-alert-feed" aria-live="polite" aria-relevant="additions text">
+                                <article class="demo-alert alert-warning">
+                                    <span class="demo-alert-severity">PRECAUCIÓN · EJEMPLO</span>
+                                    <strong>Polvo en aumento</strong>
+                                    <span>El escenario supone menos visibilidad y generación solar reducida.</span>
+                                </article>
+                                <article class="demo-alert alert-danger">
+                                    <span class="demo-alert-severity">ALTA · EJEMPLO</span>
+                                    <strong>Temperatura bajo el límite</strong>
+                                    <span>El escenario supone frío extremo; verificar el refugio térmico.</span>
+                                </article>
+                                <article class="demo-alert alert-info">
+                                    <span class="demo-alert-severity">AVISO · EJEMPLO</span>
+                                    <strong>Radiación elevada</strong>
+                                    <span>El escenario simula un aumento de radiación; revisar la protección.</span>
+                                </article>
+                            </div>
+                            <p class="hazard-scene-status" id="hazard-scene-status" role="status">Escenario seleccionado: polvo. Las alertas son simuladas.</p>
+                        </div>
+                    </section>
+                    <div class="hazard-card-grid">
+                        <article class="hazard-card hazard-dust">
+                            <div class="hazard-card-heading"><span class="hazard-icon" aria-hidden="true">〰</span><span class="hazard-level">Peligro ambiental</span></div>
+                            <h3>Tormentas de polvo</h3>
+                            <p>El polvo puede permanecer suspendido, reducir visibilidad y luz solar, cubrir equipos y adherirse a materiales. Las tormentas marcianas pueden ser regionales o globales; esta página no indica que haya una tormenta activa.</p>
+                            <div class="hazard-guidance"><strong>Motivo para elevar una alerta</strong><span>Pronóstico o imágenes de una tormenta acercándose, caída de energía solar, visibilidad degradada o acumulación de polvo en equipos.</span></div>
+                            <div class="hazard-guidance"><strong>Precaución general</strong><span>Seguir pronósticos e instrumentos locales, proteger equipos según el plan de misión y suspender actividades expuestas si el control de misión lo determina.</span></div>
+                            <a href="https://www.nasa.gov/missions/mars-2020-perseverance/nasas-perseverance-offers-clues-to-protect-crews-from-mars-dust/" target="_blank" rel="noopener noreferrer">NASA · mediciones de polvo y materiales de trajes (26 oct. 2026) ↗</a>
+                        </article>
+                        <article class="hazard-card hazard-temperature">
+                            <div class="hazard-card-heading"><span class="hazard-icon" aria-hidden="true">♨</span><span class="hazard-level">Peligro ambiental</span></div>
+                            <h3>Temperaturas extremas</h3>
+                            <p>La superficie marciana es fría y la temperatura cambia según lugar, hora y estación. El archivo de InSight documenta mediciones locales, pero la misión terminó el 15 de diciembre de 2022: no son lecturas actuales.</p>
+                            <div class="hazard-guidance"><strong>Motivo para elevar una alerta</strong><span>Temperatura fuera de los límites operativos del traje o hábitat, pérdida de control térmico o tendencia ambiental incompatible con la actividad planeada.</span></div>
+                            <div class="hazard-guidance"><strong>Precaución general</strong><span>Verificar sensores y sistemas térmicos, limitar exposición según procedimientos y disponer de un refugio y plan de retorno validados.</span></div>
+                            <a href="https://science.nasa.gov/mission/insight/" target="_blank" rel="noopener noreferrer">NASA InSight · misión y archivo climático histórico ↗</a>
+                        </article>
+                        <article class="hazard-card hazard-radiation">
+                            <div class="hazard-card-heading"><span class="hazard-icon" aria-hidden="true">☢</span><span class="hazard-level">Riesgo de exposición</span></div>
+                            <h3>Radiación espacial</h3>
+                            <p>La atmósfera delgada y la protección magnética global limitada dejan a la superficie y a los viajeros expuestos a partículas energéticas. RAD, a bordo de Curiosity, mide radiación; aquí no se muestran dosis actuales ni umbrales de tripulación.</p>
+                            <div class="hazard-guidance"><strong>Motivo para elevar una alerta</strong><span>Aumento de partículas solares detectado por los sistemas de vigilancia o dosis acumulada que alcance los límites definidos para la misión.</span></div>
+                            <div class="hazard-guidance"><strong>Precaución general</strong><span>Usar monitoreo dosimétrico y refugios con protección adecuados; las decisiones dependen de la actividad solar y de los protocolos médicos y de misión.</span></div>
+                            <a href="https://science.nasa.gov/mission/msl-curiosity/science-instruments/#h-radiation-assessment-detector-rad" target="_blank" rel="noopener noreferrer">NASA · Radiation Assessment Detector (RAD) ↗</a>
+                        </article>
+                        <article class="hazard-card hazard-eva">
+                            <div class="hazard-card-heading"><span class="hazard-icon" aria-hidden="true">⛑</span><span class="hazard-level">Riesgo de actividad</span></div>
+                            <h3>Actividades del astronauta</h3>
+                            <p>Una actividad extravehicular (EVA) combina peligros del entorno con riesgos del traje, soporte vital, movilidad, polvo, terreno, energía y comunicaciones. No hay EVA humana en Marte ni telemetría de un traje conectada a esta guía.</p>
+                            <div class="hazard-guidance"><strong>Motivo para elevar una alerta</strong><span>Falla o aviso del traje, oxígeno o energía bajos, síntomas de la persona, pérdida de comunicación, ruta bloqueada o condiciones que excedan el plan aprobado.</span></div>
+                            <div class="hazard-guidance"><strong>Precaución general</strong><span>Revisar el traje y las comunicaciones antes de salir, mantener contacto con el equipo y abortar o regresar conforme a los procedimientos certificados de la misión.</span></div>
+                            <a href="https://www.nasa.gov/missions/mars-2020-perseverance/nasas-perseverance-offers-clues-to-protect-crews-from-mars-dust/" target="_blank" rel="noopener noreferrer">NASA · polvo y diseño futuro de trajes espaciales ↗</a>
+                        </article>
+                    </div>
+                    <p class="tool-source">Fuentes: <a href="https://science.nasa.gov/mission/mars-reconnaissance-orbiter/" target="_blank" rel="noopener noreferrer">NASA MRO · polvo y clima observados desde órbita</a>, <a href="https://science.nasa.gov/mission/insight/" target="_blank" rel="noopener noreferrer">NASA InSight · mediciones ambientales históricas</a>, <a href="https://science.nasa.gov/mission/msl-curiosity/science-instruments/#h-radiation-assessment-detector-rad" target="_blank" rel="noopener noreferrer">NASA RAD · medición de radiación</a> y <a href="https://www.nasa.gov/missions/mars-2020-perseverance/nasas-perseverance-offers-clues-to-protect-crews-from-mars-dust/" target="_blank" rel="noopener noreferrer">NASA · investigación del polvo y materiales de trajes</a>. La información requiere validación con datos actuales y protocolos oficiales.</p>
+                </section>
+
+                <section class="tool-panel" id="mission-checklist" aria-labelledby="checklist-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">PREPARACIÓN</p><h2 id="checklist-title">Checklist de misión</h2></div>
+                        <span class="data-badge" id="checklist-count">0 de 8 listos</span>
+                    </div>
+                    <p class="tool-intro">Marca los puntos de preparación. Tu selección se guarda en este navegador.</p>
+                    <div class="checklist-grid">
+                        <label><input type="checkbox" data-checklist-item="objetivos"> Objetivos científicos definidos</label>
+                        <label><input type="checkbox" data-checklist-item="mapas"> Mapas y rutas revisados</label>
+                        <label><input type="checkbox" data-checklist-item="comunicacion"> Plan de comunicación confirmado</label>
+                        <label><input type="checkbox" data-checklist-item="energia"> Sistemas de energía verificados</label>
+                        <label><input type="checkbox" data-checklist-item="instrumentos"> Instrumentos y sensores comprobados</label>
+                        <label><input type="checkbox" data-checklist-item="seguridad"> Procedimientos de seguridad consultados</label>
+                        <label><input type="checkbox" data-checklist-item="alternativas"> Planes alternativos establecidos</label>
+                        <label><input type="checkbox" data-checklist-item="fuentes"> Fuentes y datos fechados</label>
+                    </div>
+                    <p class="tool-source">Lista educativa de planificación; no reemplaza listas certificadas de una misión real.</p>
+                </section>
+
+                <section class="tool-panel" id="rovers" aria-labelledby="rovers-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">EXPLORADORES ROBÓTICOS</p><h2 id="rovers-title">Rovers y misiones</h2></div>
+                        <span class="data-badge">Estado y ubicación según NASA</span>
+                    </div>
+                    <div class="rover-grid">
+                        <article class="rover-card"><span class="rover-status active">Misión activa</span><h3>Curiosity</h3><p><strong>Ubicación:</strong> cráter Gale, monte Sharp.</p><p><strong>Estudia:</strong> geología, clima antiguo y condiciones que pudieron favorecer vida microbiana.</p><a href="https://science.nasa.gov/mission/msl-curiosity/" target="_blank" rel="noopener noreferrer">Misión Curiosity en NASA ↗</a></article>
+                        <article class="rover-card"><span class="rover-status active">Misión activa</span><h3>Perseverance</h3><p><strong>Ubicación:</strong> cráter Jezero, explorando su antiguo delta.</p><p><strong>Estudia:</strong> geología y astrobiología; recolecta muestras para posible retorno futuro.</p><a href="https://science.nasa.gov/mission/mars-2020-perseverance/" target="_blank" rel="noopener noreferrer">Misión Perseverance en NASA ↗</a></article>
+                        <article class="rover-card"><span class="rover-status ended">Misión concluida</span><h3>Opportunity</h3><p><strong>Última ubicación:</strong> cráter Endeavour; dejó de comunicarse en 2018.</p><p><strong>Estudió:</strong> rocas y evidencias de agua antigua durante una misión extendida.</p><a href="https://science.nasa.gov/mission/mars-exploration-rovers-mer/" target="_blank" rel="noopener noreferrer">Misión Mars Exploration Rovers ↗</a></article>
+                    </div>
+                    <p class="tool-source">Las ubicaciones de rovers activos cambian. Consulta las páginas enlazadas para información y registros recientes.</p>
+                </section>
+
+                <section class="tool-panel" id="mars-quiz" aria-labelledby="quiz-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">PON A PRUEBA LO APRENDIDO</p><h2 id="quiz-title">Quiz marciano</h2></div>
+                        <span class="data-badge" id="quiz-score">Mejor resultado: 0/3</span>
+                    </div>
+                    <form id="quiz-form" class="quiz-form">
+                        <fieldset class="quiz-question" data-question="0"><legend>1. ¿En qué cráter aterrizó Perseverance?</legend><button type="button" class="question-favorite" data-favorite="Pregunta: ¿En qué cráter aterrizó Perseverance?">☆ Guardar pregunta</button><label><input type="radio" name="q1" value="a" required> Gale</label><label><input type="radio" name="q1" value="b"> Jezero</label><label><input type="radio" name="q1" value="c"> Endeavour</label></fieldset>
+                        <fieldset class="quiz-question" data-question="1"><legend>2. ¿Qué estudia Curiosity en el cráter Gale?</legend><button type="button" class="question-favorite" data-favorite="Pregunta: ¿Qué estudia Curiosity en el cráter Gale?">☆ Guardar pregunta</button><label><input type="radio" name="q2" value="a" required> La geología y la habitabilidad pasada</label><label><input type="radio" name="q2" value="b"> Las nubes de Venus</label><label><input type="radio" name="q2" value="c"> Los anillos de Saturno</label></fieldset>
+                        <fieldset class="quiz-question" data-question="2"><legend>3. ¿Qué debe hacerse con los datos de clima marciano?</legend><button type="button" class="question-favorite" data-favorite="Pregunta: ¿Qué debe hacerse con los datos de clima marciano?">☆ Guardar pregunta</button><label><input type="radio" name="q3" value="a" required> Tratar cualquier dato archivado como medición en vivo</label><label><input type="radio" name="q3" value="b"> Verificar fuente y fecha de actualización</label><label><input type="radio" name="q3" value="c"> Suponer que el clima es igual en todo el planeta</label></fieldset>
+                        <button class="tool-button" type="submit">Comprobar respuestas</button>
+                        <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
+                    </form>
+                </section>
+
+                <section class="tool-panel weather-panel" id="mars-weather" aria-labelledby="weather-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">OBSERVACIONES CIENTÍFICAS</p><h2 id="weather-title">Clima de Marte</h2></div>
+                        <span class="data-badge">Archivo histórico · diciembre de 2022</span>
+                    </div>
+                    <p class="weather-alert"><strong>No es una lectura en tiempo real.</strong> La estación meteorológica de InSight dejó de operar en 2022. Esta página no muestra mediciones actuales; consulta el archivo de datos científicos para los registros por sol y su fecha.</p>
+                    <div class="weather-facts"><article><strong>Fuente de mediciones</strong><span>Instrumentos meteorológicos de InSight (Mars Weather Service)</span></article><article><strong>Última actualización operativa</strong><span>Diciembre de 2022 · fin de la misión InSight</span></article><article><strong>Qué se medía</strong><span>Temperatura, presión, viento y otros datos ambientales locales</span></article></div>
+                    <p class="tool-source">Fuentes: <a href="https://science.nasa.gov/mission/insight/" target="_blank" rel="noopener noreferrer">NASA InSight</a> · <a href="https://pds.nasa.gov/" target="_blank" rel="noopener noreferrer">NASA Planetary Data System (archivo científico)</a>. La fecha indicada es el estado del archivo, no la fecha de una observación meteorológica individual.</p>
+                </section>
+
+                <section class="tool-panel" id="my-progress" aria-labelledby="progress-title">
+                    <a class="tool-panel-back" href="/#mision"><span aria-hidden="true">←</span> Volver al centro de misión</a>
+                    <div class="tool-heading">
+                        <div><p class="section-kicker">GUARDADO EN ESTE NAVEGADOR</p><h2 id="progress-title">Favoritos y progreso</h2></div>
+                        <button class="text-button" id="clear-progress" type="button">Borrar mis datos guardados</button>
+                    </div>
+                    <p class="tool-intro">Guarda las secciones y preguntas que quieras revisar. El progreso no se envía a ningún servidor.</p>
+                    <div class="progress-summary" id="progress-summary" aria-live="polite">Aún no hay favoritos ni resultados guardados.</div>
+                    <div class="favorite-buttons" aria-label="Guardar secciones favoritas">
+                        <button type="button" class="favorite-button" data-favorite="Mapa de misiones">☆ Mapa de misiones</button>
+                        <button type="button" class="favorite-button" data-favorite="Galería de NASA">☆ Galería de NASA</button>
+                        <button type="button" class="favorite-button" data-favorite="Checklist de misión">☆ Checklist</button>
+                        <button type="button" class="favorite-button" data-favorite="Rovers">☆ Rovers</button>
+                        <button type="button" class="favorite-button" data-favorite="Quiz marciano">☆ Quiz</button>
+                        <button type="button" class="favorite-button" data-favorite="Clima de Marte">☆ Clima</button>
+                    </div>
+                </section>
+
+                <section class="tool-panel preferences-panel" aria-labelledby="preferences-title">
+                    <div class="tool-heading"><div><p class="section-kicker">PREFERENCIAS</p><h2 id="preferences-title">Accesibilidad y apariencia</h2></div></div>
+                    <div class="preference-controls">
+                        <button type="button" class="tool-button" id="theme-toggle" aria-pressed="false">Activar modo oscuro</button>
+                        <div class="text-size-controls" role="group" aria-label="Tamaño del texto">
+                            <span>Tamaño del texto</span><button type="button" data-text-size="small" aria-label="Texto pequeño">A−</button><button type="button" data-text-size="normal" aria-label="Texto normal">A</button><button type="button" data-text-size="large" aria-label="Texto grande">A+</button>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <section class="exploration-banner" aria-label="Explora con ayuda de la inteligencia artificial">
+                <span class="banner-icon" aria-hidden="true">⌖</span>
+                <div>
+                    <h2>El próximo paso en la exploración empieza con una pregunta.</h2>
+                    <p>Conversa con el asistente IA para descubrir ideas, preparar tu misión y planificar con curiosidad.</p>
+                </div>
+                <a href="#asistente-ia" class="banner-link" data-open-assistant>Consultar a la IA <span aria-hidden="true">↗</span></a>
+                <span class="banner-planet" aria-hidden="true"></span>
+            </section>
+
+            <p class="science-note">Contenido informativo: los datos de rutas, clima y seguridad deben verificarse con fuentes científicas y protocolos de misión actualizados.</p>
+            {% endif %}
+        </div>
+    </main>
+
+    {% if not current_module %}
+    <footer class="page-footer" id="pie">
+        <div class="footer-brand">
+            <span class="nasa-insignia" aria-hidden="true"><span>NASA</span></span>
+            <div><strong>NASA</strong><span>Exploración <i>·</i> Ciencia <i>·</i> Un futuro mejor</span></div>
+        </div>
+        <span class="footer-motto">EXPLORANDO JUNTOS LO DESCONOCIDO</span>
+        <nav aria-label="Enlaces del pie de página">
+            <a href="#guia">Términos de uso</a><a href="#guia">Privacidad</a><a href="https://www.nasa.gov/contact/" target="_blank" rel="noopener noreferrer">Contacto</a>
+        </nav>
+    </footer>
+    {% endif %}
+
+    <section class="assistant-widget" id="asistente-ia" aria-label="Asistente de inteligencia artificial">
+        <section class="assistant-panel" id="assistant-panel" aria-labelledby="assistant-title" hidden>
+            <header class="assistant-header">
+                <div class="assistant-avatar" aria-hidden="true">✳</div>
+                <div>
+                    <p class="eyebrow">ASISTENTE DE EXPLORACIÓN</p>
+                    <h2 id="assistant-title">Hola, explorador</h2>
+                </div>
+                <span class="online-badge"><span class="status-dot"></span> LISTO</span>
+                <button class="close-assistant" type="button" aria-label="Cerrar asistente">×</button>
+            </header>
+
+            <div class="conversation" id="conversation" aria-live="polite" aria-relevant="additions text">
+                <article class="message assistant-message">
+                    <div class="message-avatar" aria-hidden="true">✳</div>
+                    <div class="message-body">
+                        <span class="message-label">ASISTENTE</span>
+                        <p>Estoy aquí para ayudarte a preparar una exploración de Marte. Pregúntame sobre rutas, riesgos del terreno o recursos para tu misión.</p>
+                    </div>
+                </article>
+            </div>
+
+            <div class="suggestions" aria-label="Preguntas sugeridas">
+                <button class="suggestion" type="button" data-prompt="¿Qué debería incluir en una lista de recursos para una caminata marciana?">Preparar recursos <span aria-hidden="true">↗</span></button>
+                <button class="suggestion" type="button" data-prompt="¿Qué factores debería evaluar antes de elegir una ruta en Marte?">Evaluar una ruta <span aria-hidden="true">↗</span></button>
+                <button class="suggestion" type="button" data-prompt="¿Qué riesgos ambientales tendría que considerar una misión humana en Marte?">Revisar riesgos <span aria-hidden="true">↗</span></button>
+            </div>
+
+            <form class="composer" id="chat-form">
+                <label class="visually-hidden" for="message-input">Escribe tu pregunta</label>
+                <textarea id="message-input" name="message" rows="1" maxlength="2000" placeholder="Pregunta lo que quieras sobre tu misión..." required></textarea>
+                <button class="send-button" type="submit" aria-label="Enviar pregunta"><span aria-hidden="true">↑</span></button>
+                <p class="composer-hint">ENTER para enviar · SHIFT + ENTER para nueva línea</p>
+            </form>
+        </section>
+
+        <button class="assistant-toggle" id="assistant-toggle" type="button" aria-expanded="false" aria-controls="assistant-panel">
+            <span class="toggle-icon" aria-hidden="true">✳</span>
+            <span>Pregúntale a la IA</span>
+        </button>
+    </section>
+</body>
+</html>
